@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Un Regalo para Ti</title>
+
+    <style>
+        /* --- ESTILOS CSS GENERALES Y DE FONDO --- */
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #87CEEB; /* Azul cielo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 100; 
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .visible {
+            display: block;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        p {
+            color: #555;
+            font-size: 1.3rem;
+            max-width: 450px;
+            margin: 10px auto;
+        }
+
+        button {
+            background-color: #fdd835;
+            color: #424242;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        button:hover {
+            background-color: #fbc02d;
+            transform: scale(1.05);
+        }
+
+        /* --- CONTENEDORES PARA LA ANIMACIÓN --- */
+        #sunflower-field {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .grass-field {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30vh; 
+            background-color: #8bc34a; 
+            z-index: 3; 
+            border-top: 5px solid #689f38;
+            transform: translateY(100%); 
+            transition: transform 1s ease-out;
+        }
+        
+        #sunflower-field.visible .grass-field {
+            transform: translateY(0); 
+        }
+
+        /* --- DISEÑO DEL GIRASOL INDIVIDUAL --- */
+        .sunflower-wrapper {
+            position: absolute;
+            bottom: 0;
+            transform-origin: bottom center;
+            opacity: 0; 
+            --center-size: 80px;
+            animation: flowerUp 2s ease-out forwards;
+        }
+        
+        .stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 100%;
+            background-color: #689f38;
+            border-radius: 4px;
+            position: relative; 
+        }
+
+        .leaf {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background-color: #7cb342;
+            border-radius: 0 100% 0 100% / 0 50% 0 50%;
+            transform-origin: bottom right;
+            top: 70%;
+        }
+
+        .leaf.left { transform: rotate(-45deg); left: -35px; }
+        .leaf.right { transform: rotate(45deg); right: -35px; }
+
+        .sunflower-head {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: var(--head-size);
+            height: var(--head-size);
+        }
+
+        .sunflower-center {
+            position: absolute;
+            width: var(--center-size); 
+            height: var(--center-size);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #5d4037;
+            border-radius: 50%;
+            z-index: 10;
+        }
+        
+        .petals {
+            position: absolute;
+            width: 100%; height: 100%;
+            animation: spin 15s linear infinite;
+        }
+
+        .petal {
+            position: absolute;
+            width: calc(var(--center-size) * 0.7); 
+            height: calc(var(--center-size) * 1.5);
+            left: 50%; 
+            top: 50%;
+            background: #fdd835;
+            border-radius: 0 0 50% 50%;
+            transform-origin: top center;
+            opacity: 0;
+            animation: bloom 2s 1s ease-out forwards;
+            transform: translateX(-50%) rotate(var(--r)); 
+            
+            /* BORDE ELIMINADO */
+            /* border: 1px solid rgba(220, 150, 0, 0.5); */
+            box-sizing: border-box;
+        }
+
+        /* --- Animaciones --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        
+        @keyframes flowerUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes bloom {
+            0% { opacity: 0; transform: translateX(-50%) scaleY(0.1) rotate(var(--r)); }
+            50% { opacity: 1; transform: translateX(-50%) scaleY(1.1) rotate(var(--r)); }
+            100% { opacity: 1; transform: translateX(-50%) scaleY(1) rotate(var(--r)); }
+        }
+        
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* --- MEDIA QUERIES PARA CELULARES --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            p { font-size: 1rem; }
+            button { padding: 12px 25px; font-size: 1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="sunflower-field" class="hidden">
+        <div class="grass-field"></div>
+        
+        <div class="sunflower-wrapper" style="left: 10%; height: 60vh; animation-delay: 0.8s; z-index: 4; --center-size: 70px; --head-size: 150px;"> 
+            <div class="stem">
+                <div class="leaf left"></div>
+                <div class="sunflower-head">
+                    <div class="petals">
+                        <div class="petal" style="--r:0deg;"></div> <div class="petal" style="--r:30deg;"></div><div class="petal" style="--r:60deg;"></div> <div class="petal" style="--r:90deg;"></div><div class="petal" style="--r:120deg;"></div> <div class="petal" style="--r:150deg;"></div><div class="petal" style="--r:180deg;"></div> <div class="petal" style="--r:210deg;"></div><div class="petal" style="--r:240deg;"></div> <div class="petal" style="--r:270deg;"></div><div class="petal" style="--r:300deg;"></div> <div class="petal" style="--r:330deg;"></div>
+                    </div>
+                    <div class="sunflower-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sunflower-wrapper" style="right: 5%; height: 50vh; animation-delay: 1.2s; z-index: 2; --center-size: 60px; --head-size: 120px;"> 
+            <div class="stem">
+                <div class="leaf right"></div>
+                <div class="sunflower-head">
+                     <div class="petals">
+                        <div class="petal" style="--r:0deg;"></div> <div class="petal" style="--r:30deg;"></div><div class="petal" style="--r:60deg;"></div> <div class="petal" style="--r:90deg;"></div><div class="petal" style="--r:120deg;"></div> <div class="petal" style="--r:150deg;"></div><div class="petal" style="--r:180deg;"></div> <div class="petal" style="--r:210deg;"></div><div class="petal" style="--r:240deg;"></div> <div class="petal" style="--r:270deg;"></div><div class="petal" style="--r:300deg;"></div> <div class="petal" style="--r:330deg;"></div>
+                    </div>
+                    <div class="sunflower-center"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sunflower-wrapper" style="left: 35%; height: 40vh; animation-delay: 1.6s; z-index: 4; --center-size: 50px; --head-size: 100px;"> 
+            <div class="stem">
+                <div class="leaf left"></div>
+                <div class="sunflower-head">
+                     <div class="petals">
+                        <div class="petal" style="--r:0deg;"></div> <div class="petal" style="--r:30deg;"></div><div class="petal" style="--r:60deg;"></div> <div class="petal" style="--r:90deg;"></div><div class="petal" style="--r:120deg;"></div> <div class="petal" style="--r:150deg;"></div><div class="petal" style="--r:180deg;"></div> <div class="petal" style="--r:210deg;"></div><div class="petal" style="--r:240deg;"></div> <div class="petal" style="--r:270deg;"></div><div class="petal" style="--r:300deg;"></div> <div class="petal" style="--r:330deg;"></div>
+                    </div>
+                    <div class="sunflower-center"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sunflower-wrapper" style="left: 60%; height: 70vh; animation-delay: 0.5s; z-index: 2; --center-size: 90px; --head-size: 180px;"> 
+            <div class="stem">
+                <div class="leaf right"></div>
+                <div class="sunflower-head">
+                    <div class="petals">
+                        <div class="petal" style="--r:0deg;"></div> <div class="petal" style="--r:30deg;"></div><div class="petal" style="--r:60deg;"></div> <div class="petal" style="--r:90deg;"></div><div class="petal" style="--r:120deg;"></div> <div class="petal" style="--r:150deg;"></div><div class="petal" style="--r:180deg;"></div> <div class="petal" style="--r:210deg;"></div><div class="petal" style="--r:240deg;"></div> <div class="petal" style="--r:270deg;"></div><div class="petal" style="--r:300deg;"></div> <div class="petal" style="--r:330deg;"></div>
+                    </div>
+                    <div class="sunflower-center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="initial-message" class="visible">
+            <h1>Un regalito para ti</h1>
+            <button id="open-gift-btn">Abrir</button>
+        </div>
+
+        <div id="gift-content" class="hidden">
+            <h1>Feliz 21 de Septiembre!</h1>
+            <p>Espero te guste doctorita</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const openGiftBtn = document.getElementById('open-gift-btn');
+            const initialMessage = document.getElementById('initial-message');
+            const giftContent = document.getElementById('gift-content');
+            const sunflowerField = document.getElementById('sunflower-field');
+
+            openGiftBtn.addEventListener('click', () => {
+                initialMessage.style.animation = 'fadeOut 0.5s forwards';
+                
+                setTimeout(() => {
+                    initialMessage.classList.remove('visible');
+                    initialMessage.classList.add('hidden');
+                    
+                    giftContent.classList.remove('hidden');
+                    giftContent.classList.add('visible');
+                    
+                    sunflowerField.classList.remove('hidden');
+                    sunflowerField.classList.add('visible');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
