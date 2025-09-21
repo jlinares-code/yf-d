@@ -35,17 +35,16 @@
             animation: fadeIn 1s ease-in-out;
         }
 
+        /* Tipografía responsiva */
         h1 {
             color: #333;
-            font-size: 2.8rem;
+            font-size: clamp(2rem, 5vw, 2.8rem);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
-        p {
-            color: #555;
-            font-size: 1.3rem;
-            max-width: 450px;
-            margin: 10px auto;
+        h2 {
+            color: #fff;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
         }
 
         button {
@@ -74,6 +73,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            overflow: hidden; /* <-- CORRECCIÓN CLAVE para evitar scrollbars */
         }
         
         .grass-field {
@@ -104,15 +104,12 @@
         }
         
         .stem {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            position: relative;
             width: 8px;
             height: 100%;
             background-color: #689f38;
             border-radius: 4px;
-            position: relative; 
+            margin: 0 auto;
         }
 
         .leaf {
@@ -165,10 +162,7 @@
             transform-origin: top center;
             opacity: 0;
             animation: bloom 2s 1s ease-out forwards;
-            transform: translateX(-50%) rotate(var(--r)); 
-            
-            /* BORDE ELIMINADO */
-            /* border: 1px solid rgba(220, 150, 0, 0.5); */
+            transform: translateX(-50%) rotate(var(--r));
             box-sizing: border-box;
         }
 
@@ -189,13 +183,6 @@
         
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* --- MEDIA QUERIES PARA CELULARES --- */
-        @media (max-width: 768px) {
-            h1 { font-size: 2rem; }
-            p { font-size: 1rem; }
-            button { padding: 12px 25px; font-size: 1rem; }
-        }
-
     </style>
 </head>
 <body>
@@ -203,7 +190,7 @@
     <div id="sunflower-field" class="hidden">
         <div class="grass-field"></div>
         
-        <div class="sunflower-wrapper" style="left: 10%; height: 60vh; animation-delay: 0.8s; z-index: 4; --center-size: 70px; --head-size: 150px;"> 
+        <div class="sunflower-wrapper" style="left: 5%; height: 60vh; width: 150px; animation-delay: 0.8s; z-index: 4; --center-size: 70px; --head-size: 150px;"> 
             <div class="stem">
                 <div class="leaf left"></div>
                 <div class="sunflower-head">
@@ -215,7 +202,7 @@
             </div>
         </div>
 
-        <div class="sunflower-wrapper" style="right: 5%; height: 50vh; animation-delay: 1.2s; z-index: 2; --center-size: 60px; --head-size: 120px;"> 
+        <div class="sunflower-wrapper" style="right: 5%; height: 50vh; width: 120px; animation-delay: 1.2s; z-index: 2; --center-size: 60px; --head-size: 120px;"> 
             <div class="stem">
                 <div class="leaf right"></div>
                 <div class="sunflower-head">
@@ -227,7 +214,7 @@
             </div>
         </div>
 
-        <div class="sunflower-wrapper" style="left: 35%; height: 40vh; animation-delay: 1.6s; z-index: 4; --center-size: 50px; --head-size: 100px;"> 
+        <div class="sunflower-wrapper" style="left: 35%; height: 40vh; width: 100px; animation-delay: 1.6s; z-index: 4; --center-size: 50px; --head-size: 100px;"> 
             <div class="stem">
                 <div class="leaf left"></div>
                 <div class="sunflower-head">
@@ -239,7 +226,7 @@
             </div>
         </div>
         
-        <div class="sunflower-wrapper" style="left: 60%; height: 70vh; animation-delay: 0.5s; z-index: 2; --center-size: 90px; --head-size: 180px;"> 
+        <div class="sunflower-wrapper" style="left: 50%; height: 70vh; width: 180px; animation-delay: 0.5s; z-index: 2; --center-size: 90px; --head-size: 180px;"> 
             <div class="stem">
                 <div class="leaf right"></div>
                 <div class="sunflower-head">
@@ -259,8 +246,8 @@
         </div>
 
         <div id="gift-content" class="hidden">
-            <h1>Feliz 21 de Septiembre!</h1>
-            <h2 style="color: #fff;">Espero te guste doctorita</h2>
+            <h1>¡Feliz 21 de Septiembre!</h1>
+            <h2 style="color: #f0f;">Espero te guste doctorita</h2>
         </div>
     </div>
 
